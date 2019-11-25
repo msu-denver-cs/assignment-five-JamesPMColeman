@@ -1,13 +1,18 @@
-var display = document.getElementById("display data");
+var display  = document.getElementById("display data");
+var colTitle = document.getElementById("column");
 
 var carBtn  = document.getElementById("car button");
 var makeBtn = document.getElementById("make button");
 var partBtn = document.getElementById("part button");
 
+
+var request;
+
 carBtn.addEventListener("click", function() {
-  var request = new XMLHttpRequest();
+  request  = new XMLHttpRequest();
 
   request.open('GET', 'http://localhost:3000/cars/search.json?q=Build');
+
   request.onload = function() {
     var carData = JSON.parse(request.responseText);
     createHTML("cars", carData);
@@ -16,7 +21,7 @@ carBtn.addEventListener("click", function() {
 });
 
 makeBtn.addEventListener("click", function() {
-  var request = new XMLHttpRequest();
+  request = new XMLHttpRequest();
 
   request.open('GET', 'http://localhost:3000/makes/search.json?q=Build');
   request.onload = function() {
@@ -27,7 +32,7 @@ makeBtn.addEventListener("click", function() {
 });
 
 partBtn.addEventListener("click", function() {
-  var request = new XMLHttpRequest();
+  request = new XMLHttpRequest();
 
   request.open('GET', 'http://localhost:3000/parts/search.json?q=Build');
   request.onload = function() {
@@ -38,28 +43,37 @@ partBtn.addEventListener("click", function() {
 });
 
 function createHTML(name ,data) {
+
   var htmlString = "";
+  var title = "";
 
   switch (name) {
     case 'cars' :
+      title += "<b>Model</b>";
       for(c = 0; c < data.length; c++) {
         htmlString += "<p>" + data[c].model + "</p>";
+
       };
       break;
 
     case 'makes' :
+      title += "<b>Make: Country</b>";
       for(c = 0; c < data.length; c++) {
-        htmlString += "<p>" + data[c].name + " product of " + data[c].country + "</p>";
+        htmlString += "<p>" + data[c].name + ": " + data[c].country + "</p>";
+
       };
       break;
 
     case 'parts' :
+      title += "<b>Parts</b>";
       for(c = 0; c < data.length; c++) {
         htmlString += "<p>" + data[c].name + "</p>";
+
       };
       break;
+
   }
 
-  display.insertAdjacentHTML("beforeend", htmlString);
-  htmlString = "";
+  colTitle.innerHTML = title;
+  display.innerHTML = htmlString;
 };
